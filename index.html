@@ -6,42 +6,41 @@
   <title>CRM-ShopOnline</title>
 </head>
 <body>
-  <section>
-    <h2>Добавить товар</h2>
+  
+  <form name="formModal" action="https://jsonplaceholder.typicode.com/posts" method="POST">
+    <p>Добавить товар</p>
+    
+    <fieldset>
 
-    <form action="https://jsonplaceholder.typicode.com/posts" method="POST">
+      <label for="name">Наименование</label>
+      <input type="text" name="name" id="name">
 
-      <fieldset>
+      <label for="category">Категория</label>
+      <input type="text" name="category" id="category">
 
-        <label for="name">Наименование</label>
-        <input type="text" name="name" id="name">
+      <label for="units">Единица измерения</label>
+      <input type="text" name="units" id="units">
 
-        <label for="category">Категория</label>
-        <input type="text" name="category" id="category">
+      <label for="discount">Дисконт</label>
+      <input type="checkbox" aria-label="Активирует поле ввода скидки">
+      <input type="number" name="discount" id="discount" disabled>
 
-        <label for="units">Единица измерения</label>
-        <input type="text" name="units" id="units">
+      <label for="description">Описание</label>
+      <textarea name="description" id="description" rows="2"></textarea>
 
-        <label for="discount">Дисконт</label>
-        <input type="checkbox" name="discount" id="discount">
-        <input type="text" name="discount" disabled>
+      <label for="count">Количество</label>
+      <input type="number" name="count" id="count">
 
-        <label for="description">Описание</label>
-        <textarea name="description" id="description" cols="30" rows="2"></textarea>
+      <label for="price">Цена</label>
+      <input type="number" name="price" id="price">
 
-        <label for="count">Количество</label>
-        <input type="number" name="count" id="count">
+      <input type="file" name="image" accept="image/*" >
 
-        <label for="price">Цена</label>
-        <input type="number" name="price" id="price">
+    </fieldset>
 
-        <input type="file" name="image" accept="image/*" >
+    <button type="submit">Добавить товар</button>
 
-      </fieldset>
-
-      <button type="submit">Добавить товар</button>
-
-    </form>
-  </section>
+  </form>
+  
 </body>
 </html>
