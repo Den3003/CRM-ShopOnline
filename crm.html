@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preload" href="fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/Inter-Bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles/normalize.css">
+  <link rel="stylesheet" href="styles/index.css">
+  <title>CRM-ShopOnline</title>
+</head>
+<body>
+  <div class="modal">
+    <div class="modal__close"></div>
+    <form name="form" action="https://jsonplaceholder.typicode.com/posts" method="POST">
+      
+      <fieldset class="modal__fieldset">
+        <!-- <div class="modal__container"> -->
+          <legend class="modal__title">Добавить товар</legend>
+          <div class="modal__container">
+            <label class="modal__label" for="name">Наименование</label>
+            <input class="modal__input" type="text" name="name" id="name">
+
+            <label class="modal__label" for="category">Категория</label>
+            <input class="modal__input" type="text" name="category" id="category">
+
+            <label class="modal__label" for="units">Единица измерения</label>
+            <input class="modal__input" type="text" name="units" id="units">
+
+            <label class="modal__label" for="discount">Дисконт</label>
+            <div class="discount">
+              <input class="discount__checkbox" type="checkbox" aria-label="Активирует поле ввода скидки">
+              <input class="modal__input discount__input" type="number" name="discount" id="discount" disabled>
+            </div>
+
+            <label class="modal__label" for="description">Описание</label>
+            <textarea class="modal__textarea" name="description" id="description"></textarea>
+
+            <label class="modal__label" for="count">Количество</label>
+            <input class="modal__input" type="number" name="count" id="count">
+
+            <label class="modal__label" for="price">Цена</label>
+            <input class="modal__input" type="number" name="price" id="price">
+          </div>
+          <button class="modal__btn" type="submit">Добавить товар</button>
+        <!-- </div> -->
+
+      </fieldset>
+
+
+    </form>
+  </div>
+  
+</body>
+</html>

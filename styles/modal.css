@@ -1,0 +1,150 @@
+.modal {
+  position: relative;
+  max-width: 792px;
+  background-color: #f2f0f9;
+  padding: 32px 0 28px;
+}
+
+.modal__close {
+  position: absolute;
+  background-image: url('../images/cross.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  top: 20px;
+  right: 30px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.modal__fieldset {
+  max-width: 580px;
+  padding: 0;
+  border: none;
+  margin: 0 auto;
+  
+}
+
+.modal__container {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 28px;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+  margin-bottom: 32px;
+}
+
+.modal__title {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 43px;
+}
+
+.modal__label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 5px;
+  margin-left: 10px;
+}
+
+.modal__input {
+  display: block;
+  width: 100%;
+  border: none;
+  border-radius: 6px;
+  background-color: #F4F2FF;
+  padding: 11px;
+}
+
+.modal__input:not(:last-child) {
+  margin-bottom: 12px;
+}
+
+.modal__textarea {
+  display: block;
+  background-color: #f4f2ff;
+  border: none;
+  border-radius: 6px;
+  padding: 11px;
+  width: 524px;
+  height: 112px;
+  resize: none;
+
+}
+
+.discount__input {
+  max-width: 474px;
+  margin-left: 50px;
+}
+
+.discount__input:disabled {
+  background-color: #eee;
+}
+
+.discount {
+  position: relative;
+}
+
+.discount__checkbox {
+  position: absolute;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.discount__checkbox:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40.39px;
+  background-color: #F4F2FF;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.discount__checkbox:after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 10px;
+  width: 20px;
+  height: 10px;
+  border: 3px solid black;
+  border-top: none;
+  border-right: none;
+  opacity: 0;
+  transform: rotate(-45deg);
+  cursor: pointer;
+}
+
+.discount__checkbox:checked:after {
+  opacity: 1;
+}
+
+.discount__checkbox:focus:before {
+  box-shadow: 0 0 3px;
+}
+
+.modal__btn {
+  float: right;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 10px 25px;
+  border: none;
+  line-height: 1.2;
+  border-radius: 6px;
+  color: #fff;
+  background-color: #6D5BD0;
+  margin-right: 28px;
+  cursor: pointer;
+}
+
+
