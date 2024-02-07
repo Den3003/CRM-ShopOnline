@@ -73,6 +73,7 @@
   border-radius: 6px;
   background-color: #F4F2FF;
   padding: 11px;
+  resize: none;
 }
 
 .modal__input:not(:last-child) {
