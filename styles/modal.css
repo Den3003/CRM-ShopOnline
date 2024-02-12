@@ -27,14 +27,6 @@
   cursor: pointer;
 }
 
-/* .modal__fieldset { */
-  /* max-width: 580px; */
-  /* padding: 0; */
-  /* border: none; */
-  /* margin: 0 auto; */
-  /*  */
-/* } */
-
 .modal__fieldset {
   background-color: #fff;
   border-radius: 8px;
@@ -79,18 +71,6 @@
 .modal__input:not(:last-child) {
   margin-bottom: 12px;
 }
-
-/* .modal__textarea { */
-  /* display: block; */
-  /* background-color: #f4f2ff; */
-  /* border: none; */
-  /* border-radius: 6px; */
-  /* padding: 11px; */
-  /* width: 524px; */
-  /* height: 112px; */
-  /* resize: none; */
-/*  */
-/* } */
 
 .modal__input:disabled {
   background-color: #eee;
