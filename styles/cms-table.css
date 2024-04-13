@@ -1,0 +1,139 @@
+.cms-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1020px;
+}
+
+.wrapper {
+  border-radius: 8px;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+  
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+
+.cms-table__head {
+  background-color: var(--titan-white);
+}
+
+.cms-table__head-cell {
+  text-align: left;
+  font-size: 12px;
+  line-height: 1.25;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 14.5px 0;
+  
+}
+
+.cms-table__head-cell:first-child {
+  width: 108px;
+  padding: 0 0 0 15px;
+}
+
+.cms-table__head-cell:nth-child(2) {
+  width: 300px;
+}
+
+.cms-table__head-cell:nth-child(3) {
+  width: 182px;
+}
+
+.cms-table__head-cell:nth-child(4) {
+  width: 75px;
+}
+
+.cms-table__head-cell:nth-child(5) {
+  width: 91px;
+}
+
+.cms-table__head-cell:last-child {
+  width: 170px;
+}
+
+.cms-table__head-cell_position_center {
+  text-align: center;
+}
+
+.cms-table__head-cell_position_right {
+  text-align: right;
+}
+
+.cms-table__head-row {
+  border-top: 1px solid var(--snuff);
+  border-bottom: 1px solid var(--snuff);
+}
+
+.cms-table__body-row {
+  background-color: #fff;
+  border-top: 1px solid var(--snuff);
+  border-bottom: 1px solid var(--snuff);
+}
+
+.cms-table__body-cell {
+  font-size: 14px;
+  line-height: 1.215;
+  font-weight: 500;
+  color: #25213b;
+  padding: 21px 0;
+}
+
+.cms-table__body-cell_font_color {
+  color: inherit;
+}
+
+.cms-table__body-cell:first-child {
+  padding: 0 0 0 15px;
+}
+
+.cms-table__body-cell_position_center {
+  text-align: center;
+}
+
+.cms-table__body-cell_position_right {
+  text-align: right;
+}
+
+.cms-table__body-box-button {
+  padding: 0;
+  text-align: center;
+  font-size: 0;
+}
+
+.cms-table__body-button {
+  color: var(--main-color);
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.cms-table__body-button:not(:last-child) {
+  margin-right: 20px;
+}
+
+.cms-table__body-button:hover .cms-table__button-icon {
+  filter: drop-shadow( 0px 0px 1px rgba(110, 104, 147, .4));
+  color: var(--blue-marguerite);
+}
+
+.cms-table__body-button:focus {
+  outline-offset: 4px;
+  outline-color: var(--blue-marguerite);
+}
+
+.cms-table__body-button:focus .cms-table__button-icon {
+  filter: drop-shadow( 0px 0px 1px rgba(110, 104, 147, .4));
+  color: var(--blue-marguerite);
+}
+
+.cms-table__body-button:active .cms-table__button-icon {
+  filter: drop-shadow( 0px 0px 1px rgba(110, 104, 147, .4));
+  color: var(--gigas);
+}
+
+
+

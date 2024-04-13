@@ -1,0 +1,21 @@
+.total-cost {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.total-cost__span {
+  font-size: 18px;
+  font-weight: 700;
+  color: #6d5bd0;
+}
+
+@media (max-width: 470px) {
+  .total-cost {
+    font-size: 12px;
+  }
+
+  .total-cost__span {
+    font-size: 16px;
+  }
+}

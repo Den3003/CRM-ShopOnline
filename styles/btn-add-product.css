@@ -1,0 +1,26 @@
+.btn-add-product {
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 7.9px 0;
+  width: 100%;
+  border: none;
+  line-height: 1.2;
+  outline: none;
+  border-radius: 6px;
+  border: 2px solid var(--blue-marguerite);
+  color: var(--white);
+  background-color: var(--blue-marguerite);
+  cursor: pointer;
+  transition: color .3s ease-in-out, background-color .3s ease-in-out;
+}
+
+.btn-add-product:hover, .btn-add-product:focus {
+  background-color: var(--white);
+  color: var(--blue-marguerite);
+}
+
+.btn-add-product:active {
+  background-color: var(--snuff);
+  color: var(--blue-marguerite);
+}
