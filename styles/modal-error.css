@@ -1,8 +1,9 @@
-.overlay-error {
-  height: 100dvh;
-  padding: 50px 0;
-  background-color: var(--overlay-background-color);
-  display: none;
+.modal-error__wrapper {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  /* display: none;   */
 }
 
 .modal-error {
@@ -12,9 +13,10 @@
   align-items: center;
   gap: 33px 0;
   background-color: var(--white-lilac);
-  max-width: 350px;
+  flex-basis: 350px;
   margin: 0 auto;
   padding: 109px 0 96px 0;
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.25);
 }
 
 .modal-error__close {
