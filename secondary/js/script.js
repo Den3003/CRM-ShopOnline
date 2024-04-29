@@ -19,7 +19,7 @@ if (typeof quantityProductUser === 'number'
     `
   );
   console.log(`На складе ${quantityProductUser} единицы товара "${nameProductUser}" на сумму ${priceProductUser * quantityProductUser} деревянных`);
-} else {
+  } else {
   console.log('Вы ввели некорректные данные');
-}
+  }
 }
