@@ -16,7 +16,7 @@
     revenue = 15000;
   }
 
-  if (revenue <= 15000 && revenue > 0) {
+  if (revenue > 0) {
     tax += revenue * 0.13;
     console.log(`Налог 15% на доход до 15 000 ₽. составит: ${revenue * 0.13} ₽.`);
   }
