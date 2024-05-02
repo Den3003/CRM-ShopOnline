@@ -15,6 +15,7 @@
       break;
     
     default:
+      console.log('У вас нет дохода')
       break;
   }
 }
