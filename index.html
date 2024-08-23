@@ -376,7 +376,7 @@
     </div>
   </section>
 
-  <div class="overlay">
+  <div class="overlay overlay_show">
     <div class="modal">
       <div class="modal__header">
         <p class="modal__title jsModalTitle">Добавить товар</p>
@@ -389,7 +389,7 @@
           <path d="M2 22L22 2" stroke="#6E6893" stroke-width="3" stroke-linecap="round" />
         </svg>
       </button>
-      <form name="formProduct" action="https://jsonplaceholder.typicode.com/posts" method="POST">
+      <form class="jsFormAddProduct" name="formProduct" action="https://jsonplaceholder.typicode.com/posts" method="POST">
         <fieldset class="modal__fieldset modal-grid">
           <div class="modal-grid__cell">
             <label class="modal__label" for="name">Наименование</label>
@@ -403,8 +403,8 @@
             
             <label class="modal__label" for="discount">Дисконт</label>
             <div class="modal__optional">
-              <input class="modal__checkbox" type="checkbox" aria-label="Активирует поле ввода скидки">
-              <input class="modal__input" type="number" name="discount" id="discount" disabled>
+              <input class="modal__checkbox jsModalCheckbox" type="checkbox" aria-label="Активирует поле ввода скидки">
+              <input class="modal__input jsDiscountText" type="number" name="discount" id="discount" disabled>
             </div>
           </div>
           <div class="modal-grid__cell">
@@ -433,7 +433,7 @@
         </div>
       </form>
     </div>
-    <div class="modal-error__wrapper">
+    <div class="modal-error-wrapper">
       <div class="modal-error">
         <button type="button" class="modal-error__close jsModalErrorClose">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
