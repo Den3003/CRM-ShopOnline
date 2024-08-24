@@ -1,9 +1,9 @@
 'use strict';
 
-const modalTitle = document.querySelector('.jsModalTitle');
-const closeModal = document.querySelector('.jsModalClose');
-const modalProductId = document.querySelector('.jsIdProduct');
-const formAddProduct = document.querySelector('.jsFormAddProduct');
-const modalCheckbox = document.querySelector('.jsModalCheckbox');
-const modalDscountText = document.querySelector('.jsDiscountText');
-const modalTotalCost = document.querySelector('.jsModalTotalCost');
+const modalTitle = document.querySelector('.js-modal-title');
+const closeModal = document.querySelector('.js-modal-close');
+const modalProductId = document.querySelector('.js-id-product');
+const formAddProduct = document.querySelector('.js-form-add-product');
+const modalCheckbox = document.querySelector('.js-modal-checkbox');
+const modalDscountText = document.querySelector('.js-discount-text');
+const modalTotalCost = document.querySelector('.js-modal-total-cost');
