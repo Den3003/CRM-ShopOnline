@@ -88,11 +88,11 @@ const createRow = (obj) => {
   newRaw.setAttribute('data-product_id', `${obj.id}`);
   const imageObj = obj?.images ? `
     <svg class="cms-table__button-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <use href="../images/sprite.svg#picture"></use>
+      <use href="#picture"></use>
     </svg>` :
     `
     <svg class="cms-table__button-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <use href="../images/sprite.svg#picture-none"></use>
+      <use href="#picture-none"></use>
     </svg>
   `;
 
@@ -114,13 +114,13 @@ const createRow = (obj) => {
         <button class="cms-table__body-button js-cms-create-product" 
           type="button">
           <svg class="cms-table__button-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <use href="../images/sprite.svg#create-product"></use>
+            <use href="#create-product"></use>
           </svg>
         </button>
         <button class="cms-table__body-button js-cms-delete-product" 
           type="button">
           <svg class="cms-table__button-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <use href="../images/sprite.svg#delete-product"></use>
+            <use href="#delete-product"></use>
           </svg>
         </button>
       </td>
