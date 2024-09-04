@@ -1,5 +1,8 @@
 'use strict';
 
+const modalOverlayClose = document.querySelector('.js-overlay');
+const cmsBtnAddProduct = document.querySelector('.js-cms-btn-add-product');
+const modalWrapper = document.querySelector('.js-modal');
 const modalTitle = document.querySelector('.js-modal-title');
 const closeModal = document.querySelector('.js-modal-close');
 const modalProductId = document.querySelector('.js-id-product');
@@ -136,3 +139,19 @@ const renderGoods = (arr) => {
 };
 
 renderGoods(userArray);
+
+cmsBtnAddProduct.addEventListener('click', () => {
+  modalOverlayClose.classList.add('is-visible');
+});
+
+modalWrapper.addEventListener('click', event => {
+  event.stopPropagation();
+});
+
+modalOverlayClose.addEventListener('click', () => {
+  modalOverlayClose.classList.remove('is-visible');
+});
+
+closeModal.addEventListener('click', () => {
+  modalOverlayClose.classList.remove('is-visible');
+});
