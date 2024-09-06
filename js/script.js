@@ -1,10 +1,10 @@
 'use strict';
 
 const modalOverlayClose = document.querySelector('.js-overlay');
-const cmsBtnAddProduct = document.querySelector('.js-cms-btn-add-product');
+// const cmsBtnAddProduct = document.querySelector('.js-cms-btn-add-product');
 const modalWrapper = document.querySelector('.js-modal');
 const modalTitle = document.querySelector('.js-modal-title');
-const closeModal = document.querySelector('.js-modal-close');
+// const closeModal = document.querySelector('.js-modal-close');
 const modalProductId = document.querySelector('.js-id-product');
 const formAddProduct = document.querySelector('.js-form-add-product');
 const modalCheckbox = document.querySelector('.js-modal-checkbox');
@@ -85,10 +85,12 @@ const userArray = [
   },
 ];
 
+let cloneUserArray = [...userArray];
+
 const createRow = (obj) => {
   const newRaw = document.createElement('tr');
   newRaw.classList.add('cms-table__body-row');
-  newRaw.setAttribute('data-product_id', `${obj.id}`);
+  newRaw.setAttribute('data-product-Id', `${obj.id}`);
   const imageObj = obj?.images ? `
     <svg class="cms-table__button-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <use href="#picture"></use>
@@ -133,25 +135,32 @@ const createRow = (obj) => {
 };
 
 const renderGoods = (arr) => {
+  cmsTableBody.innerHTML = '';
+
   arr.map((item) => {
     cmsTableBody.insertAdjacentElement('beforeend', createRow(item));
   });
 };
 
-renderGoods(userArray);
+renderGoods(cloneUserArray);
 
-cmsBtnAddProduct.addEventListener('click', () => {
-  modalOverlayClose.classList.add('is-visible');
-});
 
-modalWrapper.addEventListener('click', event => {
-  event.stopPropagation();
-});
+document.body.addEventListener('click', e => {
+  const target = e.target;
+  if (target.closest('.js-cms-delete-product')) {
+    const objectId = +target.closest('.cms-table__body-row').dataset.productId;
+    target.closest('.cms-table__body-row').remove();
+    cloneUserArray = cloneUserArray.filter(item => item.id !== objectId);
+    renderGoods(cloneUserArray);
+    console.log('userArray: ', cloneUserArray);
+  }
 
-modalOverlayClose.addEventListener('click', () => {
-  modalOverlayClose.classList.remove('is-visible');
-});
+  if (target.classList.contains('js-cms-btn-add-product')) {
+    modalOverlayClose.classList.add('is-visible');
+  }
 
-closeModal.addEventListener('click', () => {
-  modalOverlayClose.classList.remove('is-visible');
+  if (target.classList.contains('js-overlay') ||
+      target.closest('.js-modal-close')) {
+    modalOverlayClose.classList.remove('is-visible');
+  }
 });
