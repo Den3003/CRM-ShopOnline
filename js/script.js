@@ -1,5 +1,6 @@
 'use strict';
 
+const cmsTotalCost = document.querySelector('.js-cms-total-cost');
 const modalOverlayClose = document.querySelector('.js-overlay');
 // const cmsBtnAddProduct = document.querySelector('.js-cms-btn-add-product');
 const modalWrapper = document.querySelector('.js-modal');
@@ -8,7 +9,7 @@ const modalTitle = document.querySelector('.js-modal-title');
 const modalProductId = document.querySelector('.js-id-product');
 const formAddProduct = document.querySelector('.js-form-add-product');
 const modalCheckbox = document.querySelector('.js-modal-checkbox');
-const modalDscountText = document.querySelector('.js-discount-text');
+const modalDiscountText = document.querySelector('.js-discount-text');
 const modalTotalCost = document.querySelector('.js-modal-total-cost');
 const cmsTableBody = document.querySelector('.js-cms-table-body');
 const userArray = [
@@ -136,6 +137,8 @@ const createRow = (obj) => {
 
 const renderGoods = (arr) => {
   cmsTableBody.innerHTML = '';
+  const cost = arr.reduce((acc, item) => acc + (item.count * item.price), 0);
+  cmsTotalCost.textContent = `${cost} руб.`;
 
   arr.map((item) => {
     cmsTableBody.insertAdjacentElement('beforeend', createRow(item));
@@ -163,4 +166,51 @@ document.body.addEventListener('click', e => {
       target.closest('.js-modal-close')) {
     modalOverlayClose.classList.remove('is-visible');
   }
+});
+
+const checkboxToggle = e => {
+  const target = e.target;
+
+  if (target.checked) {
+    modalDiscountText.disabled = false;
+  } else {
+    modalDiscountText.value = '';
+    modalDiscountText.disabled = true;
+  }
+};
+
+modalCheckbox.addEventListener('click', checkboxToggle);
+
+const getRandomId = () => {
+  const randomId = Math.floor(Math.random() * (300000000 - 1 + 1)) + 1;
+  cloneUserArray.forEach(item => {
+    if (randomId === item.id) {
+      return getRandomId();
+    }
+  });
+
+  return randomId;
+};
+
+formAddProduct.addEventListener('submit', e => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const dataObject = Object.fromEntries(formData);
+
+  dataObject.id = getRandomId();
+
+  if (modalDiscountText.disabled) {
+    dataObject.discount = false;
+  }
+
+  cloneUserArray.push(dataObject);
+  renderGoods(cloneUserArray);
+  formAddProduct.reset();
+  modalOverlayClose.classList.remove('is-visible');
+});
+
+formAddProduct.price.addEventListener('change', () => {
+  modalTotalCost.textContent = `
+    ${+formAddProduct.count.value * +formAddProduct.price.value} руб.
+  `;
 });

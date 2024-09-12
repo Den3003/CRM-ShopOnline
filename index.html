@@ -17,7 +17,7 @@
     <div class="container">
       <div class="cms__header">
         <h2 class="cms__title">CMS</h2>
-        <p class="total-cost">Итоговая стоимость: <span class="total-cost__span js-cms-total-cost">$900.00</span></p>
+        <p class="total-cost">Итоговая стоимость: <span class="total-cost__span js-cms-total-cost">00.00 руб.</span></p>
       </div>
 
       <hr class="cms__line line">
@@ -393,30 +393,30 @@
       <form class="js-form-add-product" name="formProduct" action="https://jsonplaceholder.typicode.com/posts" method="POST">
         <fieldset class="modal__fieldset modal-grid">
           <div class="modal-grid__cell">
-            <label class="modal__label" for="name">Наименование</label>
-            <input class="modal__input" type="text" name="name" id="name">
+            <label class="modal__label" for="title">Наименование</label>
+            <input class="modal__input" type="text" name="title" id="title" required>
             
             <label class="modal__label" for="category">Категория</label>
-            <input class="modal__input" type="text" name="category" id="category">
+            <input class="modal__input" type="text" name="category" id="category" required>
             
             <label class="modal__label" for="units">Единица измерения</label>
-            <input class="modal__input" type="text" name="units" id="units">
+            <input class="modal__input" type="text" name="units" id="units" required>
             
             <label class="modal__label" for="discount">Дисконт</label>
             <div class="modal__optional">
               <input class="modal__checkbox js-modal-checkbox" type="checkbox" aria-label="Активирует поле ввода скидки">
-              <input class="modal__input js-discount-text" type="number" name="discount" id="discount" disabled>
+              <input class="modal__input js-discount-text" type="number" name="discount" id="discount" disabled required>
             </div>
           </div>
           <div class="modal-grid__cell">
             <label class="modal__label" for="description">Описание</label>
-            <textarea rows="5" class="modal__input" name="description" id="description"></textarea>
+            <textarea rows="5" class="modal__input" name="description" id="description" required></textarea>
             
             <label class="modal__label" for="count">Количество</label>
-            <input class="modal__input" type="number" name="count" id="count">
+            <input class="modal__input" type="number" name="count" id="count" required>
             
             <label class="modal__label" for="price">Цена</label>
-            <input class="modal__input" type="number" name="price" id="price">
+            <input class="modal__input" type="number" name="price" id="price" required>
           </div>
           <div class="modal-grid__cell modal-grid__cell_size_two-columns picture-grid">
             <div>
@@ -429,7 +429,7 @@
           </div>
         </fieldset>
         <div class="modal__footer">
-          <p class="modal__total-cost total-cost">Итоговая стоимость: <span class="total-cost__span js-modal-total-cost">$ 900.00</span></p>
+          <p class="modal__total-cost total-cost">Итоговая стоимость: <span class="total-cost__span js-modal-total-cost">00.00 руб.</span></p>
           <button class="modal__btn-add-product btn-add-product js-modal-btn-add-product" type="submit">Добавить товар</button>
         </div>
       </form>
