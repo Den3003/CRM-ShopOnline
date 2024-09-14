@@ -381,7 +381,7 @@
     <div class="modal js-modal">
       <div class="modal__header">
         <p class="modal__title js-modal-title">Добавить товар</p>
-        <p class="modal__number">id: <span class="modal__number-span js-id-product">201910241</span></p>
+        <p class="modal__number">id: <span class="modal__number-span js-modal-id-product">201910241</span></p>
       </div>
       <hr class="modal__line line">
       <button class="modal__close js-modal-close" type="button" aria-label="close">
@@ -405,7 +405,7 @@
             <label class="modal__label" for="discount">Дисконт</label>
             <div class="modal__optional">
               <input class="modal__checkbox js-modal-checkbox" type="checkbox" aria-label="Активирует поле ввода скидки">
-              <input class="modal__input js-discount-text" type="number" name="discount" id="discount" disabled required>
+              <input class="modal__input js-discount-text" type="number" name="discount" id="discount" min="1" disabled required>
             </div>
           </div>
           <div class="modal-grid__cell">
@@ -413,10 +413,10 @@
             <textarea rows="5" class="modal__input" name="description" id="description" required></textarea>
             
             <label class="modal__label" for="count">Количество</label>
-            <input class="modal__input" type="number" name="count" id="count" required>
+            <input class="modal__input" type="number" name="count" id="count" min="1" required>
             
             <label class="modal__label" for="price">Цена</label>
-            <input class="modal__input" type="number" name="price" id="price" required>
+            <input class="modal__input" type="number" name="price" id="price" min="1" required>
           </div>
           <div class="modal-grid__cell modal-grid__cell_size_two-columns picture-grid">
             <div>

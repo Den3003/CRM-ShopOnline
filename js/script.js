@@ -6,7 +6,7 @@ const modalOverlayClose = document.querySelector('.js-overlay');
 const modalWrapper = document.querySelector('.js-modal');
 const modalTitle = document.querySelector('.js-modal-title');
 // const closeModal = document.querySelector('.js-modal-close');
-const modalProductId = document.querySelector('.js-id-product');
+const modalProductId = document.querySelector('.js-modal-id-product');
 const formAddProduct = document.querySelector('.js-form-add-product');
 const modalCheckbox = document.querySelector('.js-modal-checkbox');
 const modalDiscountText = document.querySelector('.js-discount-text');
@@ -24,7 +24,7 @@ const userArray = [
       ' себя не ограничивать при запуске игр и' +
       ' других требовательных приложений.',
     'category': 'mobile-phone',
-    'discont': false,
+    'discount': false,
     'count': 3,
     'units': 'шт',
     'images': {
@@ -39,7 +39,7 @@ const userArray = [
     'description': 'Внедорожник на дистанционном управлении.' +
       ' Скорость 25км/ч. Возраст 7 - 14 лет',
     'category': 'toys',
-    'discont': 5,
+    'discount': 5,
     'count': 1,
     'units': 'шт',
     /* 'images': {
@@ -55,7 +55,7 @@ const userArray = [
       ' и умный MECOOL KI PRO, прекрасно спроектированный, сочетает в себе' +
       ' прочный процессор Cortex-A53 с чипом Amlogic S905D',
     'category': 'tv-box',
-    'discont': 15,
+    'discount': 15,
     'count': 4,
     'units': 'шт',
     'images': {
@@ -76,7 +76,7 @@ const userArray = [
       ' в домашних условиях или на предприятии, объединить все необходимое' +
       ' вам оборудование в единую сеть.',
     'category': 'cables',
-    'discont': false,
+    'discount': false,
     'count': 420,
     'units': 'v',
     'images': {
@@ -87,6 +87,13 @@ const userArray = [
 ];
 
 let cloneUserArray = [...userArray];
+
+const getModalTotalPrice = (count, price, discount) => {
+  const totalPrice = +count * +price;
+  const discountPercent = +discount / 100;
+
+  return totalPrice - (totalPrice * discountPercent);
+};
 
 const createRow = (obj) => {
   const newRaw = document.createElement('tr');
@@ -113,7 +120,7 @@ const createRow = (obj) => {
       <td class="cms-table__body-cell cms-table__body-cell_position_right">
         ${obj.price} руб.</td>
       <td class="cms-table__body-cell cms-table__body-cell_position_right">
-        ${obj.price * obj.count} руб.</td>
+        ${getModalTotalPrice(obj.count, obj.price, obj.discount)} руб.</td>
       <td class="cms-table__body-box-button">
         <button class="cms-table__body-button js-cms-create-picture" 
         type="button">${imageObj}</button>
@@ -137,7 +144,8 @@ const createRow = (obj) => {
 
 const renderGoods = (arr) => {
   cmsTableBody.innerHTML = '';
-  const cost = arr.reduce((acc, item) => acc + (item.count * item.price), 0);
+  const cost = arr.reduce((acc, item) =>
+    acc + (getModalTotalPrice(item.count, item.price, item.discount)), 0);
   cmsTotalCost.textContent = `${cost} руб.`;
 
   arr.map((item) => {
@@ -147,18 +155,29 @@ const renderGoods = (arr) => {
 
 renderGoods(cloneUserArray);
 
+const getRandomId = () => {
+  const randomId = Math.floor(Math.random() * (300000000 - 1 + 1)) + 1;
+  cloneUserArray.forEach(item => {
+    if (randomId === item.id) {
+      return getRandomId();
+    }
+  });
+
+  return randomId;
+};
 
 document.body.addEventListener('click', e => {
   const target = e.target;
   if (target.closest('.js-cms-delete-product')) {
     const objectId = +target.closest('.cms-table__body-row').dataset.productId;
     target.closest('.cms-table__body-row').remove();
-    cloneUserArray = cloneUserArray.filter(item => item.id !== objectId);
+    cloneUserArray = cloneUserArray.filter(item => +item.id !== objectId);
     renderGoods(cloneUserArray);
     console.log('userArray: ', cloneUserArray);
   }
 
   if (target.classList.contains('js-cms-btn-add-product')) {
+    modalProductId.textContent = `${getRandomId()}`;
     modalOverlayClose.classList.add('is-visible');
   }
 
@@ -177,27 +196,23 @@ const checkboxToggle = e => {
     modalDiscountText.value = '';
     modalDiscountText.disabled = true;
   }
+
+  modalTotalCost.textContent = `
+    ${getModalTotalPrice(
+      formAddProduct.count.value,
+      formAddProduct.price.value,
+      formAddProduct.discount.value)} руб.
+  `;
 };
 
 modalCheckbox.addEventListener('click', checkboxToggle);
-
-const getRandomId = () => {
-  const randomId = Math.floor(Math.random() * (300000000 - 1 + 1)) + 1;
-  cloneUserArray.forEach(item => {
-    if (randomId === item.id) {
-      return getRandomId();
-    }
-  });
-
-  return randomId;
-};
 
 formAddProduct.addEventListener('submit', e => {
   e.preventDefault();
   const formData = new FormData(e.target);
   const dataObject = Object.fromEntries(formData);
 
-  dataObject.id = getRandomId();
+  dataObject.id = modalProductId.textContent;
 
   if (modalDiscountText.disabled) {
     dataObject.discount = false;
@@ -207,10 +222,21 @@ formAddProduct.addEventListener('submit', e => {
   renderGoods(cloneUserArray);
   formAddProduct.reset();
   modalOverlayClose.classList.remove('is-visible');
+  modalTotalCost.textContent = '00.00 руб.';
+  modalDiscountText.disabled = true;
 });
 
-formAddProduct.price.addEventListener('change', () => {
-  modalTotalCost.textContent = `
-    ${+formAddProduct.count.value * +formAddProduct.price.value} руб.
-  `;
+formAddProduct.addEventListener('change', e => {
+  const target = e.target;
+
+  if (formAddProduct.price === target ||
+    formAddProduct.count === target ||
+    formAddProduct.discount === target) {
+    modalTotalCost.textContent = `
+      ${getModalTotalPrice(
+      formAddProduct.count.value,
+      formAddProduct.price.value,
+      formAddProduct.discount.value)} руб.
+    `;
+  }
 });
