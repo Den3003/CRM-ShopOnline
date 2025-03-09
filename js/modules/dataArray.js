@@ -1,5 +1,3 @@
-
-
 const userArray = [
   {
     'id': 253842678,
@@ -78,6 +76,3 @@ let cloneUserArray = [...userArray];
 export default {
   cloneUserArray,
 };
-// console.log('cloneUserArray: ', cloneUserArray);
-
-// export default cloneUserArray

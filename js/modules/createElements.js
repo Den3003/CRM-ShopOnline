@@ -1,4 +1,4 @@
-import controls from './control.js';
+import { getTotalPrice } from './calculations.js';
 
 export const createRow = (obj) => {
   const newRaw = document.createElement('tr');
@@ -25,7 +25,7 @@ export const createRow = (obj) => {
       <td class="cms-table__body-cell cms-table__body-cell_position_right">
         ${obj.price} руб.</td>
       <td class="cms-table__body-cell cms-table__body-cell_position_right">
-        ${controls.getTotalPrice(obj.count, obj.price, obj.discount)} руб.</td>
+        ${getTotalPrice(obj.count, obj.price, obj.discount)} руб.</td>
       <td class="cms-table__body-box-button">
         <button class="cms-table__body-button js-cms-create-picture" 
         type="button">${imageObj}</button>
