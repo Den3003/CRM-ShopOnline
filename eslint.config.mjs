@@ -21,11 +21,11 @@ export default [...compat.extends("eslint:recommended"), {
         },
 
         ecmaVersion: "latest",
+        sourceType: "module",
         sourceType: "commonjs",
 
         parserOptions: {
             parser: "babel-eslint",
-            sourceType: module,
         },
     },
     plugins: {
@@ -35,15 +35,6 @@ export default [...compat.extends("eslint:recommended"), {
         "jsdoc/require-param-description": 1,
         "jsdoc/require-returns": 1,
         "jsdoc/require-returns-description": 1,
-       /*  jsdoc: ["error", {
-            FunctionDeclaration: true,
-            MethodDefinition: true,
-            ClassDeclaration: true,
-
-            prefer: {
-                returns: "return",
-            },
-    }], */
         "no-console": "off",
         "no-loop-func": ["error"],
         eqeqeq: ["error", "always"],
