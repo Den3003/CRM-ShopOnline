@@ -1,4 +1,5 @@
-import { getTotalPrice } from './calculations.js';
+import {getTotalPrice} from './calculations.js';
+import control from './control.js';
 
 export const createRow = (obj) => {
   const newRaw = document.createElement('tr');
@@ -9,7 +10,7 @@ export const createRow = (obj) => {
       <use href="#picture"></use>
     </svg>` :
     `
-    <svg class="cms-table__button-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <use href="#picture-none"></use>
     </svg>
   `;
@@ -43,6 +44,18 @@ export const createRow = (obj) => {
         </button>
       </td>
       `);
+
+  if (!obj.images) {
+    newRaw.querySelector('.cms-table__body-button')
+        .classList.add('button-disabled');
+    newRaw.querySelector('.cms-table__body-button')
+        .classList.remove('js-cms-create-picture');
+  } else {
+    control.listenPictureButtons(newRaw);
+    if (obj.images.small) {
+      newRaw.setAttribute('data-pic', `${obj.images.small}`);
+    }
+  }
 
   return newRaw;
 };

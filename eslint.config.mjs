@@ -1,8 +1,8 @@
 import globals from "globals";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import {fileURLToPath} from "node:url";
 import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
+import {FlatCompat} from "@eslint/eslintrc";
 import jsdoc from "eslint-plugin-jsdoc";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
     baseDirectory: __dirname,
     recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
+    allConfig: js.configs.all,
 });
 
 export default [...compat.extends("eslint:recommended"), {
@@ -21,11 +21,10 @@ export default [...compat.extends("eslint:recommended"), {
         },
 
         ecmaVersion: "latest",
-        sourceType: "commonjs",
+        sourceType: "module",
 
         parserOptions: {
             parser: "babel-eslint",
-            sourceType: module,
         },
     },
     plugins: {
@@ -35,15 +34,6 @@ export default [...compat.extends("eslint:recommended"), {
         "jsdoc/require-param-description": 1,
         "jsdoc/require-returns": 1,
         "jsdoc/require-returns-description": 1,
-       /*  jsdoc: ["error", {
-            FunctionDeclaration: true,
-            MethodDefinition: true,
-            ClassDeclaration: true,
-
-            prefer: {
-                returns: "return",
-            },
-    }], */
         "no-console": "off",
         "no-loop-func": ["error"],
         eqeqeq: ["error", "always"],
@@ -179,7 +169,9 @@ export default [...compat.extends("eslint:recommended"), {
         "no-new-object": "error",
         "no-tabs": "error",
         "no-trailing-spaces": "error",
-        "object-curly-spacing": "error",
+        "object-curly-spacing": ["error", "never", {
+            "objectsInObjects": true,
+        }],
 
         "one-var": ["error", {
             var: "never",
@@ -191,9 +183,9 @@ export default [...compat.extends("eslint:recommended"), {
         "padded-blocks": ["error", "never"],
         "quote-props": ["error", "consistent"],
 
-        quotes: ["error", "single", {
+        quotes: "off",/* ["error", "double", {
             allowTemplateLiterals: true,
-        }],
+        }], */
 
         semi: "error",
         "semi-spacing": "error",

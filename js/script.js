@@ -1,5 +1,5 @@
 import data from "./modules/dataArray.js";
-import { renderGoods } from "./modules/render.js";
+import {renderGoods} from "./modules/render.js";
 import controls from './modules/control.js';
 
 const init = () => {
