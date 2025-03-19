@@ -14,7 +14,7 @@ const userArray = [
     'count': 3,
     'units': 'шт',
     'images': {
-      'small': '/images/xiaomi.jpg',
+      'small': 'images/xiaomi.jpg',
       'big': 'img/smrtxiaomi11t-b.jpg',
     },
   },
@@ -45,7 +45,7 @@ const userArray = [
     'count': 4,
     'units': 'шт',
     'images': {
-      'small': '/images/tv.webp',
+      'small': 'images/tv.webp',
       'big': 'img/tvboxmecool-b.jpg',
     },
   },
@@ -66,7 +66,7 @@ const userArray = [
     'count': 420,
     'units': 'v',
     'images': {
-      'small': '/images/cable.jpg',
+      'small': 'images/cable.jpg',
       'big': 'img/lan_proconnect43-3-25-b.jpg',
     },
   },
