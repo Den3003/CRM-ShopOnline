@@ -7,6 +7,11 @@ const modalDiscountText = document.querySelector('.js-discount-text');
 const btnCmsAddProduct = document.querySelector('.js-cms-btn-add-product');
 const modalProductId = document.querySelector('.js-modal-id-product');
 const modalOverlayClose = document.querySelector('.js-overlay');
+const cmsTotalProducts = document.querySelector('.js-total-products');
+const cmsStartProductsPage = document.querySelector('.js-start-products-page');
+const cmsEndProductsPage = document.querySelector('.js-end-products-page');
+const cmsPrevButton = document.querySelector('.js-cms-pagination-btn-prev');
+const cmsNextButton = document.querySelector('.js-cms-pagination-btn-next');
 
 export default {
   cmsTableBody,
@@ -18,4 +23,9 @@ export default {
   btnCmsAddProduct,
   modalProductId,
   modalOverlayClose,
+  cmsTotalProducts,
+  cmsStartProductsPage,
+  cmsEndProductsPage,
+  cmsPrevButton,
+  cmsNextButton,
 };

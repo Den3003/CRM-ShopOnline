@@ -1,7 +1,34 @@
 import domElements from "./domElements.js";
-import data from "./dataArray.js";
-import {getTotalPrice, getRandomId} from "./calculations.js";
+import {getTotalPrice} from "./calculations.js";
 import {renderGoods} from "./render.js";
+import {statePages} from "./variables.js";
+import {PRODUCTS_LIST, URL, PRODUCTS_PAGE} from "./variables.js";
+import {httpRequest} from "./serverRequest.js";
+
+const pageNavigationControl = () => {
+  domElements.cmsPrevButton.addEventListener("click", () => {
+    if (statePages.currentPage > 1) {
+      statePages.currentPage--;
+      httpRequest(URL + PRODUCTS_LIST +
+        PRODUCTS_PAGE + statePages.currentPage, {
+        method: 'get',
+        callback: renderGoods,
+      });
+    }
+  });
+
+  domElements.cmsNextButton.addEventListener("click", () => {
+    if (statePages.currentPage * statePages.itemsPerPages <
+        statePages.totalPages) {
+      statePages.currentPage++;
+      httpRequest(URL + PRODUCTS_LIST + PRODUCTS_PAGE +
+        statePages.currentPage, {
+        method: 'get',
+        callback: renderGoods,
+      });
+    }
+  });
+};
 
 const checkboxToggle = () => {
   domElements.modalCheckbox.addEventListener('click', e => {
@@ -25,7 +52,6 @@ const checkboxToggle = () => {
 
 const modalControl = () => {
   const openModal = () => {
-    domElements.modalProductId.textContent = `${getRandomId()}`;
     domElements.modalOverlayClose.classList.add('is-visible');
   };
 
@@ -116,4 +142,5 @@ export default {
   showChangePrice,
   deleteProduct,
   listenPictureButtons,
+  pageNavigationControl,
 };
