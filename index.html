@@ -64,8 +64,7 @@
             <p class="cms-footer__text">Показывать на странице:</p>
             <div class="choose-page-wrapper">
               <select class="cms-footer__text choose-page" name="row-count">
-                <option value="5">5</option>
-                <option selected value="10">10</option>
+                <option class="js-limit-product-pages" value="10">10</option>
               </select>
             </div>
           </div>
@@ -146,7 +145,7 @@
         </div>
       </form>
     </div>
-    <div class="modal-error-wrapper">
+    <div class="modal-error-wrapper js-modal-error-wrapper">
       <div class="modal-error">
         <button type="button" class="modal-error__close js-modal-error-close">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -155,7 +154,7 @@
           </svg>
         </button>
         <div class="modal-error__image"></div>
-        <p class="modal-error__text">Что-то пошло не так</p>
+        <p class="modal-error__text js-modal-error-text">Что-то пошло не так</p>
       </div>
     </div>
   </div>

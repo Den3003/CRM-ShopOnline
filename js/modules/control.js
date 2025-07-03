@@ -1,9 +1,14 @@
 import domElements from "./domElements.js";
-import {getTotalPrice} from "./calculations.js";
-import {renderGoods} from "./render.js";
+import {getTotalPrice, updatePageInfo} from "./calculations.js";
+import {renderGoods, renderTotalPrice} from "./render.js";
 import {statePages} from "./variables.js";
-import {PRODUCTS_LIST, URL, PRODUCTS_PAGE} from "./variables.js";
+import {
+  PRODUCTS_LIST, URL,
+  PRODUCTS_PAGE,
+  PRODUCTS_TOTAL_PRICE,
+} from "./variables.js";
 import {httpRequest} from "./serverRequest.js";
+import {createRow} from "./createElements.js";
 
 const pageNavigationControl = () => {
   domElements.cmsPrevButton.addEventListener("click", () => {
@@ -19,7 +24,7 @@ const pageNavigationControl = () => {
 
   domElements.cmsNextButton.addEventListener("click", () => {
     if (statePages.currentPage * statePages.itemsPerPages <
-        statePages.totalPages) {
+        statePages.totalCount) {
       statePages.currentPage++;
       httpRequest(URL + PRODUCTS_LIST + PRODUCTS_PAGE +
         statePages.currentPage, {
@@ -71,24 +76,76 @@ const modalControl = () => {
   });
 };
 
+const closeModalErrorControl = () => {
+  const closeModalError = () => {
+    domElements.modalErrorWrapper.classList.remove('is-visible');
+  };
+
+  domElements.modalErrorWrapper.addEventListener('click', e => {
+    const target = e.target;
+
+    if (target === domElements.modalErrorWrapper ||
+      target.closest('.js-modal-error-close')) {
+      closeModalError();
+    }
+  });
+};
+
+const addProductPage = (err, item) => {
+  if (err) {
+    domElements.modalErrorWrapper.classList.add('is-visible');
+    if (item) {
+      domElements.modalErrorText.innerHTML = item;
+    }
+    return;
+  }
+
+  if (statePages.currentPage === statePages.totalPages &&
+    statePages.totalCount % +domElements.cmsLimitProductsPage.textContent) {
+    domElements.cmsTableBody
+        .insertAdjacentElement('beforeend', createRow(item));
+  }
+  if (statePages.currentPage === statePages.totalPages &&
+    !statePages.totalCount % +domElements.cmsLimitProductsPage.textContent) {
+    domElements.cmsTableBody.innerHTML = '';
+    domElements.cmsTableBody
+        .insertAdjacentElement('beforeend', createRow(item));
+  }
+
+  httpRequest(URL + PRODUCTS_TOTAL_PRICE, {
+    method: 'get',
+    callback: renderTotalPrice,
+  });
+
+  httpRequest(URL + PRODUCTS_LIST, {
+    method: 'get',
+    callback: updatePageInfo,
+  });
+
+  domElements.formAddProduct.reset();
+  domElements.modalOverlayClose.classList.remove('is-visible');
+  domElements.modalTotalCost.textContent = '0 руб.';
+  domElements.modalDiscountText.disabled = true;
+};
+
 const addProduct = () => {
   domElements.formAddProduct.addEventListener('submit', e => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const dataObject = Object.fromEntries(formData);
 
-    dataObject.id = domElements.modalProductId.textContent;
-
     if (domElements.modalDiscountText.disabled) {
       dataObject.discount = false;
     }
 
-    data.cloneUserArray.push(dataObject);
-    renderGoods(data.cloneUserArray);
-    domElements.formAddProduct.reset();
-    domElements.modalOverlayClose.classList.remove('is-visible');
-    domElements.modalTotalCost.textContent = '0 руб.';
-    domElements.modalDiscountText.disabled = true;
+    httpRequest(URL + PRODUCTS_LIST, {
+      method: 'post',
+      callback: addProductPage,
+      body: dataObject,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
   });
 };
 
@@ -143,4 +200,5 @@ export default {
   deleteProduct,
   listenPictureButtons,
   pageNavigationControl,
+  closeModalErrorControl,
 };

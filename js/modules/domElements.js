@@ -12,6 +12,9 @@ const cmsStartProductsPage = document.querySelector('.js-start-products-page');
 const cmsEndProductsPage = document.querySelector('.js-end-products-page');
 const cmsPrevButton = document.querySelector('.js-cms-pagination-btn-prev');
 const cmsNextButton = document.querySelector('.js-cms-pagination-btn-next');
+const cmsLimitProductsPage = document.querySelector('.js-limit-product-pages');
+const modalErrorText = document.querySelector('.js-modal-error-text');
+const modalErrorWrapper = document.querySelector('.js-modal-error-wrapper');
 
 export default {
   cmsTableBody,
@@ -28,4 +31,7 @@ export default {
   cmsEndProductsPage,
   cmsPrevButton,
   cmsNextButton,
+  cmsLimitProductsPage,
+  modalErrorText,
+  modalErrorWrapper,
 };

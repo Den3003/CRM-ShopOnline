@@ -4,8 +4,9 @@ export const PRODUCTS_PAGE = '?page=';
 export const PRODUCTS_TOTAL_PRICE = '/api/total';
 export const statePages = {
   currentPage: NaN,
-  totalPages: NaN,
+  totalCount: NaN,
   itemsPerPages: NaN,
+  totalPages: NaN,
 };
 
 
