@@ -21,7 +21,7 @@ export default [...compat.extends("eslint:recommended"), {
         },
 
         ecmaVersion: "latest",
-        sourceType: "commonjs",
+        sourceType: "module",
 
         parserOptions: {
             parser: "babel-eslint",
