@@ -111,6 +111,10 @@
   cursor: pointer;
 }
 
+.cms-table__body-button.button-disabled {
+  cursor: default;
+}
+
 .cms-table__body-button:not(:last-child) {
   margin-right: 20px;
 }

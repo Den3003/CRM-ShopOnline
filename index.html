@@ -64,15 +64,15 @@
             <p class="cms-footer__text">Показывать на странице:</p>
             <div class="choose-page-wrapper">
               <select class="cms-footer__text choose-page" name="row-count">
-                <option value="">10</option>
+                <option class="js-limit-product-pages" value="10">10</option>
               </select>
             </div>
           </div>
 
-          <p class="cms-footer__page-number"><span>1-10</span> of <span>276</span></p>
+          <p class="cms-footer__page-number"><span class="js-start-products-page">1</span>-<span class="js-end-products-page">10</span> of <span class="js-total-products">0</span></p>
 
           <div class="cms-footer__page-navigation">
-            <button class="cms-footer__button-page-navigation js-cms-pagination-btn-prew" type="button">
+            <button class="cms-footer__button-page-navigation js-cms-pagination-btn-prev" type="button">
               <svg class="cms-footer__page-navigation-icon" width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M5.79971 1.10636C6.42812 0.51287 5.43313 -0.426818 4.80472 0.216126L0.196378 4.51891C-0.0654595 4.7662 -0.0654595 5.21131 0.196378 5.4586L4.80472 9.81084C5.43313 10.4043 6.42812 9.46464 5.79971 8.87115L1.71504 5.01348L5.79971 1.10636Z" fill="currentColor" />
               </svg>
@@ -92,7 +92,7 @@
     <div class="modal js-modal">
       <div class="modal__header">
         <p class="modal__title js-modal-title">Добавить товар</p>
-        <p class="modal__number">id: <span class="modal__number-span js-modal-id-product">201910241</span></p>
+        <p class="modal__number"><!-- id: --> <span class="modal__number-span js-modal-id-product"></span></p>
       </div>
       <hr class="modal__line line">
       <button class="modal__close js-modal-close" type="button" aria-label="close">
@@ -145,7 +145,7 @@
         </div>
       </form>
     </div>
-    <div class="modal-error-wrapper">
+    <div class="modal-error-wrapper js-modal-error-wrapper">
       <div class="modal-error">
         <button type="button" class="modal-error__close js-modal-error-close">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -154,7 +154,7 @@
           </svg>
         </button>
         <div class="modal-error__image"></div>
-        <p class="modal-error__text">Что-то пошло не так</p>
+        <p class="modal-error__text js-modal-error-text">Что-то пошло не так</p>
       </div>
     </div>
   </div>

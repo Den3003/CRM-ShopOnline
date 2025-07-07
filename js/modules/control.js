@@ -1,7 +1,39 @@
 import domElements from "./domElements.js";
-import data from "./dataArray.js";
-import { getTotalPrice, getRandomId } from "./calculations.js";
-import { renderGoods } from "./render.js";
+import {getTotalPrice, updatePageInfo} from "./calculations.js";
+import {renderGoods, renderTotalPrice} from "./render.js";
+import {statePages} from "./variables.js";
+import {
+  PRODUCTS_LIST, URL,
+  PRODUCTS_PAGE,
+  PRODUCTS_TOTAL_PRICE,
+} from "./variables.js";
+import {httpRequest} from "./serverRequest.js";
+import {createRow} from "./createElements.js";
+
+const pageNavigationControl = () => {
+  domElements.cmsPrevButton.addEventListener("click", () => {
+    if (statePages.currentPage > 1) {
+      statePages.currentPage--;
+      httpRequest(URL + PRODUCTS_LIST +
+        PRODUCTS_PAGE + statePages.currentPage, {
+        method: 'get',
+        callback: renderGoods,
+      });
+    }
+  });
+
+  domElements.cmsNextButton.addEventListener("click", () => {
+    if (statePages.currentPage * statePages.itemsPerPages <
+        statePages.totalCount) {
+      statePages.currentPage++;
+      httpRequest(URL + PRODUCTS_LIST + PRODUCTS_PAGE +
+        statePages.currentPage, {
+        method: 'get',
+        callback: renderGoods,
+      });
+    }
+  });
+};
 
 const checkboxToggle = () => {
   domElements.modalCheckbox.addEventListener('click', e => {
@@ -16,17 +48,15 @@ const checkboxToggle = () => {
 
     domElements.modalTotalCost.textContent = `
       ${getTotalPrice(
-        domElements.formAddProduct.count.value,
-        domElements.formAddProduct.price.value,
-        domElements.formAddProduct.discount.value)} руб.
+      domElements.formAddProduct.count.value,
+      domElements.formAddProduct.price.value,
+      domElements.formAddProduct.discount.value)} руб.
     `;
   });
-  
 };
 
 const modalControl = () => {
   const openModal = () => {
-    domElements.modalProductId.textContent = `${getRandomId()}`;
     domElements.modalOverlayClose.classList.add('is-visible');
   };
 
@@ -42,9 +72,60 @@ const modalControl = () => {
     if (target === domElements.modalOverlayClose ||
       target.closest('.js-modal-close')) {
       closeModal();
+    }
+  });
+};
+
+const closeModalErrorControl = () => {
+  const closeModalError = () => {
+    domElements.modalErrorWrapper.classList.remove('is-visible');
+  };
+
+  domElements.modalErrorWrapper.addEventListener('click', e => {
+    const target = e.target;
+
+    if (target === domElements.modalErrorWrapper ||
+      target.closest('.js-modal-error-close')) {
+      closeModalError();
+    }
+  });
+};
+
+const addProductPage = (err, item) => {
+  if (err) {
+    domElements.modalErrorWrapper.classList.add('is-visible');
+    if (item) {
+      domElements.modalErrorText.innerHTML = item;
+    }
+    return;
   }
+
+  if (statePages.currentPage === statePages.totalPages &&
+    statePages.totalCount % +domElements.cmsLimitProductsPage.textContent) {
+    domElements.cmsTableBody
+        .insertAdjacentElement('beforeend', createRow(item));
+  }
+  if (statePages.currentPage === statePages.totalPages &&
+    !statePages.totalCount % +domElements.cmsLimitProductsPage.textContent) {
+    domElements.cmsTableBody.innerHTML = '';
+    domElements.cmsTableBody
+        .insertAdjacentElement('beforeend', createRow(item));
+  }
+
+  httpRequest(URL + PRODUCTS_TOTAL_PRICE, {
+    method: 'get',
+    callback: renderTotalPrice,
   });
 
+  httpRequest(URL + PRODUCTS_LIST, {
+    method: 'get',
+    callback: updatePageInfo,
+  });
+
+  domElements.formAddProduct.reset();
+  domElements.modalOverlayClose.classList.remove('is-visible');
+  domElements.modalTotalCost.textContent = '0 руб.';
+  domElements.modalDiscountText.disabled = true;
 };
 
 const addProduct = () => {
@@ -52,35 +133,34 @@ const addProduct = () => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const dataObject = Object.fromEntries(formData);
-  
-    dataObject.id = domElements.modalProductId.textContent;
-  
+
     if (domElements.modalDiscountText.disabled) {
       dataObject.discount = false;
     }
-  
-    data.cloneUserArray.push(dataObject);
-    renderGoods(data.cloneUserArray);
-    domElements.formAddProduct.reset();
-    domElements.modalOverlayClose.classList.remove('is-visible');
-    domElements.modalTotalCost.textContent = '0 руб.';
-    domElements.modalDiscountText.disabled = true;
-  });
 
+    httpRequest(URL + PRODUCTS_LIST, {
+      method: 'post',
+      callback: addProductPage,
+      body: dataObject,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  });
 };
 
 const showChangePrice = () => {
   domElements.formAddProduct.addEventListener('change', e => {
     const target = e.target;
-  
+
     if (domElements.formAddProduct.price === target ||
       domElements.formAddProduct.count === target ||
       domElements.formAddProduct.discount === target) {
       domElements.modalTotalCost.textContent = `
         ${getTotalPrice(
-        domElements.formAddProduct.count.value,
-        domElements.formAddProduct.price.value,
-        domElements.formAddProduct.discount.value)} руб.
+      domElements.formAddProduct.count.value,
+      domElements.formAddProduct.price.value,
+      domElements.formAddProduct.discount.value)} руб.
       `;
     }
   });
@@ -90,12 +170,26 @@ const deleteProduct = () => {
   domElements.cmsTableBody.addEventListener('click', e => {
     const target = e.target;
     if (target.closest('.js-cms-delete-product')) {
-      const objectId = +target.closest('.cms-table__body-row').dataset.productId;
+      const objectId = +target.closest('.cms-table__body-row')
+          .dataset.productId;
       target.closest('.cms-table__body-row').remove();
-      data.cloneUserArray = data.cloneUserArray.filter(item => +item.id !== objectId);
+      data.cloneUserArray = data.cloneUserArray
+          .filter(item => +item.id !== objectId);
       renderGoods(data.cloneUserArray);
     }
   });
+};
+
+const listenPictureButtons = (row) => {
+  row.querySelector('.js-cms-create-picture')
+      .addEventListener('click', (e) => {
+        const target = e.target;
+        const left = (window.screen.width - 600) / 2;
+        const top = (window.screen.height - 600) / 2;
+        window.open(target.closest('.cms-table__body-row')
+            .dataset.pic, "picture"
+        , `width=600,height=600,left=${left},top=${top}`);
+      });
 };
 
 export default {
@@ -104,4 +198,7 @@ export default {
   addProduct,
   showChangePrice,
   deleteProduct,
-}
+  listenPictureButtons,
+  pageNavigationControl,
+  closeModalErrorControl,
+};

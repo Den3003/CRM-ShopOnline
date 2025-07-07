@@ -1,8 +1,8 @@
 import globals from "globals";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import {fileURLToPath} from "node:url";
 import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
+import {FlatCompat} from "@eslint/eslintrc";
 import jsdoc from "eslint-plugin-jsdoc";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
     baseDirectory: __dirname,
     recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
+    allConfig: js.configs.all,
 });
 
 export default [...compat.extends("eslint:recommended"), {
@@ -21,7 +21,6 @@ export default [...compat.extends("eslint:recommended"), {
         },
 
         ecmaVersion: "latest",
-        sourceType: "module",
         sourceType: "commonjs",
 
         parserOptions: {
@@ -170,7 +169,9 @@ export default [...compat.extends("eslint:recommended"), {
         "no-new-object": "error",
         "no-tabs": "error",
         "no-trailing-spaces": "error",
-        "object-curly-spacing": "error",
+        "object-curly-spacing": ["error", "never", {
+            "objectsInObjects": true,
+        }],
 
         "one-var": ["error", {
             var: "never",
@@ -182,9 +183,9 @@ export default [...compat.extends("eslint:recommended"), {
         "padded-blocks": ["error", "never"],
         "quote-props": ["error", "consistent"],
 
-        quotes: ["error", "single", {
+        quotes: "off",/* ["error", "double", {
             allowTemplateLiterals: true,
-        }],
+        }], */
 
         semi: "error",
         "semi-spacing": "error",
