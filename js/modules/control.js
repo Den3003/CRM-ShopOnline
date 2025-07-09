@@ -7,14 +7,15 @@ import {
   PRODUCTS_PAGE,
   PRODUCTS_TOTAL_PRICE,
 } from "./variables.js";
-import {httpRequest} from "./serverRequest.js";
+import {fetchRequest} from "./serverRequest.js";
 import {createRow} from "./createElements.js";
+import showModal from "./createModal.js";
 
 const pageNavigationControl = () => {
   domElements.cmsPrevButton.addEventListener("click", () => {
     if (statePages.currentPage > 1) {
       statePages.currentPage--;
-      httpRequest(URL + PRODUCTS_LIST +
+      fetchRequest(URL + PRODUCTS_LIST +
         PRODUCTS_PAGE + statePages.currentPage, {
         method: 'get',
         callback: renderGoods,
@@ -26,7 +27,7 @@ const pageNavigationControl = () => {
     if (statePages.currentPage * statePages.itemsPerPages <
         statePages.totalCount) {
       statePages.currentPage++;
-      httpRequest(URL + PRODUCTS_LIST + PRODUCTS_PAGE +
+      fetchRequest(URL + PRODUCTS_LIST + PRODUCTS_PAGE +
         statePages.currentPage, {
         method: 'get',
         callback: renderGoods,
@@ -35,112 +36,113 @@ const pageNavigationControl = () => {
   });
 };
 
-const checkboxToggle = () => {
-  domElements.modalCheckbox.addEventListener('click', e => {
+const checkboxToggle = (modalCheckbox, modalDiscountText,
+    formAddProduct, modalTotalCost) => {
+  modalCheckbox.addEventListener('click', e => {
     const target = e.target;
 
     if (target.checked) {
-      domElements.modalDiscountText.disabled = false;
+      modalDiscountText.disabled = false;
     } else {
-      domElements.modalDiscountText.value = '';
-      domElements.modalDiscountText.disabled = true;
+      modalDiscountText.value = '';
+      modalDiscountText.disabled = true;
     }
 
-    domElements.modalTotalCost.textContent = `
+    modalTotalCost.textContent = `
       ${getTotalPrice(
-      domElements.formAddProduct.count.value,
-      domElements.formAddProduct.price.value,
-      domElements.formAddProduct.discount.value)} руб.
+      formAddProduct.count.value,
+      formAddProduct.price.value,
+      formAddProduct.discount.value)} руб.
     `;
   });
 };
 
-const modalControl = () => {
-  const openModal = () => {
-    domElements.modalOverlayClose.classList.add('is-visible');
-  };
+// const addProductPage = (err, item) => {
+//   if (err) {
+//     domElements.modalErrorWrapper.classList.add('is-visible');
+//     if (item) {
+//       domElements.modalErrorText.innerHTML = item;
+//     }
+//     return;
+//   }
 
-  const closeModal = () => {
-    domElements.modalOverlayClose.classList.remove('is-visible');
-  };
+//   if (statePages.currentPage === statePages.totalPages &&
+//     statePages.totalCount % +domElements.cmsLimitProductsPage.textContent) {
+//     domElements.cmsTableBody
+//         .insertAdjacentElement('beforeend', createRow(item));
+//   }
+//   if (statePages.currentPage === statePages.totalPages &&
+//     !statePages.totalCount % +domElements.cmsLimitProductsPage.textContent) {
+//     domElements.cmsTableBody.innerHTML = '';
+//     domElements.cmsTableBody
+//         .insertAdjacentElement('beforeend', createRow(item));
+//   }
 
-  domElements.btnCmsAddProduct.addEventListener('click', openModal);
+//   httpRequest(URL + PRODUCTS_TOTAL_PRICE, {
+//     method: 'get',
+//     callback: renderTotalPrice,
+//   });
 
-  domElements.modalOverlayClose.addEventListener('click', e => {
-    const target = e.target;
+//   httpRequest(URL + PRODUCTS_LIST, {
+//     method: 'get',
+//     callback: updatePageInfo,
+//   });
 
-    if (target === domElements.modalOverlayClose ||
-      target.closest('.js-modal-close')) {
-      closeModal();
-    }
-  });
-};
+//   domElements.formAddProduct.reset();
+//   domElements.modalTotalCost.textContent = '0 руб.';
+//   domElements.modalDiscountText.disabled = true;
+// };
 
-const closeModalErrorControl = () => {
-  const closeModalError = () => {
-    domElements.modalErrorWrapper.classList.remove('is-visible');
-  };
-
-  domElements.modalErrorWrapper.addEventListener('click', e => {
-    const target = e.target;
-
-    if (target === domElements.modalErrorWrapper ||
-      target.closest('.js-modal-error-close')) {
-      closeModalError();
-    }
-  });
-};
-
-const addProductPage = (err, item) => {
-  if (err) {
-    domElements.modalErrorWrapper.classList.add('is-visible');
-    if (item) {
-      domElements.modalErrorText.innerHTML = item;
-    }
-    return;
-  }
-
-  if (statePages.currentPage === statePages.totalPages &&
-    statePages.totalCount % +domElements.cmsLimitProductsPage.textContent) {
-    domElements.cmsTableBody
-        .insertAdjacentElement('beforeend', createRow(item));
-  }
-  if (statePages.currentPage === statePages.totalPages &&
-    !statePages.totalCount % +domElements.cmsLimitProductsPage.textContent) {
-    domElements.cmsTableBody.innerHTML = '';
-    domElements.cmsTableBody
-        .insertAdjacentElement('beforeend', createRow(item));
-  }
-
-  httpRequest(URL + PRODUCTS_TOTAL_PRICE, {
-    method: 'get',
-    callback: renderTotalPrice,
-  });
-
-  httpRequest(URL + PRODUCTS_LIST, {
-    method: 'get',
-    callback: updatePageInfo,
-  });
-
-  domElements.formAddProduct.reset();
-  domElements.modalOverlayClose.classList.remove('is-visible');
-  domElements.modalTotalCost.textContent = '0 руб.';
-  domElements.modalDiscountText.disabled = true;
-};
-
-const addProduct = () => {
-  domElements.formAddProduct.addEventListener('submit', e => {
+const addProduct = (formAddProduct, modalDiscountText, modalTotalCost) => {
+  formAddProduct.addEventListener('submit', e => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const dataObject = Object.fromEntries(formData);
 
-    if (domElements.modalDiscountText.disabled) {
+    if (modalDiscountText.disabled) {
       dataObject.discount = false;
     }
 
-    httpRequest(URL + PRODUCTS_LIST, {
+    fetchRequest(URL + PRODUCTS_LIST, {
       method: 'post',
-      callback: addProductPage,
+      callback: (err, item) => {
+        console.log('item: ', item);
+        if (err) {
+          domElements.modalErrorWrapper.classList.add('is-visible');
+          if (item) {
+            domElements.modalErrorText.innerHTML = item;
+          }
+          return;
+        }
+
+        if (statePages.currentPage === statePages.totalPages &&
+          statePages.totalCount %
+            +domElements.cmsLimitProductsPage.textContent) {
+          domElements.cmsTableBody
+              .insertAdjacentElement('beforeend', createRow(item));
+        }
+        if (statePages.currentPage === statePages.totalPages &&
+          !statePages.totalCount %
+            +domElements.cmsLimitProductsPage.textContent) {
+          domElements.cmsTableBody.innerHTML = '';
+          domElements.cmsTableBody
+              .insertAdjacentElement('beforeend', createRow(item));
+        }
+
+        fetchRequest(URL + PRODUCTS_TOTAL_PRICE, {
+          method: 'get',
+          callback: renderTotalPrice,
+        });
+
+        fetchRequest(URL + PRODUCTS_LIST, {
+          method: 'get',
+          callback: updatePageInfo,
+        });
+
+        formAddProduct.reset();
+        modalTotalCost.textContent = '0 руб.';
+        modalDiscountText.disabled = true;
+      },
       body: dataObject,
       headers: {
         'Content-Type': 'application/json',
@@ -149,21 +151,56 @@ const addProduct = () => {
   });
 };
 
-const showChangePrice = () => {
-  domElements.formAddProduct.addEventListener('change', e => {
+const showChangePrice = (formAddProduct, modalTotalCost) => {
+  formAddProduct.addEventListener('change', e => {
     const target = e.target;
 
-    if (domElements.formAddProduct.price === target ||
-      domElements.formAddProduct.count === target ||
-      domElements.formAddProduct.discount === target) {
-      domElements.modalTotalCost.textContent = `
+    if (formAddProduct.price === target ||
+      formAddProduct.count === target ||
+      formAddProduct.discount === target) {
+      modalTotalCost.textContent = `
         ${getTotalPrice(
-      domElements.formAddProduct.count.value,
-      domElements.formAddProduct.price.value,
-      domElements.formAddProduct.discount.value)} руб.
+      formAddProduct.count.value,
+      formAddProduct.price.value,
+      formAddProduct.discount.value)} руб.
       `;
     }
   });
+};
+
+const modalControl = () => {
+  const openModal = async ({target}) => {
+    if (target.classList.contains('js-cms-btn-add-product')) {
+      const {
+        formAddProduct,
+        modalCheckbox,
+        modalDiscountText,
+        modalTotalCost,
+      } = await showModal();
+      addProduct(formAddProduct, modalDiscountText, modalTotalCost);
+      checkboxToggle(modalCheckbox, modalDiscountText,
+          formAddProduct, modalTotalCost);
+      showChangePrice(formAddProduct, modalTotalCost);
+    }
+
+    if (target.closest('.js-cms-create-product')) {
+      const productId =
+        target.closest('.cms-table__body-row').dataset.productId;
+      const {
+        formAddProduct,
+        modalCheckbox,
+        modalDiscountText,
+        modalTotalCost,
+      } = await fetchRequest(URL + PRODUCTS_LIST + productId, {
+        method: 'get',
+        callback: showModal,
+      });
+      checkboxToggle(modalCheckbox, modalDiscountText,
+          formAddProduct, modalTotalCost);
+      showChangePrice(formAddProduct, modalTotalCost);
+    }
+  };
+  domElements.cmsWrapper.addEventListener('click', openModal);
 };
 
 const deleteProduct = () => {
@@ -193,12 +230,12 @@ const listenPictureButtons = (row) => {
 };
 
 export default {
-  checkboxToggle,
+  // checkboxToggle,
   modalControl,
-  addProduct,
-  showChangePrice,
+  // addProduct,
+  // showChangePrice,
   deleteProduct,
   listenPictureButtons,
   pageNavigationControl,
-  closeModalErrorControl,
+  // closeModalErrorControl,
 };

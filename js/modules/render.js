@@ -2,7 +2,7 @@ import domElements from "./domElements.js";
 import {createRow} from "./createElements.js";
 import {updatePageInfo} from "./calculations.js";
 import {statePages} from "./variables.js";
-import {httpRequest} from "./serverRequest.js";
+import {fetchRequest} from "./serverRequest.js";
 import {PRODUCTS_TOTAL_PRICE, URL} from "./variables.js";
 
 export const renderTotalPrice = (err, data) => {
@@ -12,12 +12,12 @@ export const renderTotalPrice = (err, data) => {
 export const renderGoods = (err, arr) => {
   domElements.cmsTableBody.innerHTML = '';
   if (err) {
-    domElements.cmsTableBody.innerHTML = arr;
+    domElements.cmsTableBody.innerHTML = err;
     return;
   }
   statePages.currentPage = arr.page;
 
-  httpRequest(URL + PRODUCTS_TOTAL_PRICE, {
+  fetchRequest(URL + PRODUCTS_TOTAL_PRICE, {
     method: 'get',
     callback: renderTotalPrice,
   });

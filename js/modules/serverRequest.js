@@ -1,40 +1,74 @@
 
-export const httpRequest = (url, {
+export const fetchRequest = async (url, {
   method = 'get',
   callback,
-  body = {},
+  body,
   headers,
 }) => {
   try {
-    const xhr = new XMLHttpRequest();
-    xhr.open(method, url);
+    const options = {
+      method,
+    };
 
-    if (headers) {
-      for (const [key, value] of Object.entries(headers)) {
-        xhr.setRequestHeader(key, value);
-      }
+    if (body) {
+      options.body = JSON.stringify(body);
     }
 
-    xhr.addEventListener('load', () => {
-      if (xhr.status < 200 || xhr.status >= 300) {
-        callback(new Error(xhr.status), xhr.response);
-        return;
-      }
+    if (headers) {
+      options.headers = headers;
+    }
 
-      const data = JSON.parse(xhr.response);
-      if (callback) {
-        callback(null, data);
-      }
-    });
+    const response = await fetch(url, options);
 
-    xhr.addEventListener('error', () => {
-      callback(new Error(xhr.status), xhr.response);
-    });
+    if (response.ok) {
+      const data = await response.json();
+      if (callback) return callback(null, data);
+      return;
+    }
 
-    xhr.send(JSON.stringify(body));
+    throw new Error(`Ошибка ${response.status}: ${response.statusText}`);
   } catch (err) {
-    callback(new Error(err));
+    return callback(err);
   }
 };
+
+
+// export const httpRequest = (url, {
+//   method = 'get',
+//   callback,
+//   body = {},
+//   headers,
+// }) => {
+//   try {
+//     const xhr = new XMLHttpRequest();
+//     xhr.open(method, url);
+
+//     if (headers) {
+//       for (const [key, value] of Object.entries(headers)) {
+//         xhr.setRequestHeader(key, value);
+//       }
+//     }
+
+//     xhr.addEventListener('load', () => {
+//       if (xhr.status < 200 || xhr.status >= 300) {
+//         callback(new Error(xhr.status), xhr.response);
+//         return;
+//       }
+
+//       const data = JSON.parse(xhr.response);
+//       if (callback) {
+//         callback(null, data);
+//       }
+//     });
+
+//     xhr.addEventListener('error', () => {
+//       callback(new Error(xhr.status), xhr.response);
+//     });
+
+//     xhr.send(JSON.stringify(body));
+//   } catch (err) {
+//     callback(new Error(err));
+//   }
+// };
 
 
