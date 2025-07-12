@@ -11,6 +11,19 @@ import {fetchRequest} from "./serverRequest.js";
 import {createRow} from "./createElements.js";
 import showModal from "./createModal.js";
 
+
+const toBase64 = file => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.addEventListener('loadend', () => {
+    resolve(reader.result);
+  });
+  reader.addEventListener('error', err => {
+    reject(err);
+  });
+
+  reader.readAsDataURL(file);
+});
+
 const pageNavigationControl = () => {
   domElements.cmsPrevButton.addEventListener("click", () => {
     if (statePages.currentPage > 1) {
@@ -93,8 +106,9 @@ const checkboxToggle = (modalCheckbox, modalDiscountText,
 //   domElements.modalDiscountText.disabled = true;
 // };
 
-const addProduct = (formAddProduct, modalDiscountText, modalTotalCost) => {
-  formAddProduct.addEventListener('submit', e => {
+const addProduct = (formAddProduct, modalDiscountText,
+    modalTotalCost, modalAddImageInput, overlay) => {
+  formAddProduct.addEventListener('submit', async e => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const dataObject = Object.fromEntries(formData);
@@ -103,10 +117,13 @@ const addProduct = (formAddProduct, modalDiscountText, modalTotalCost) => {
       dataObject.discount = false;
     }
 
+    if (modalAddImageInput.files[0]?.size < 1048576) {
+      dataObject.image = await toBase64(dataObject.image);
+    }
+
     fetchRequest(URL + PRODUCTS_LIST, {
       method: 'post',
       callback: (err, item) => {
-        console.log('item: ', item);
         if (err) {
           domElements.modalErrorWrapper.classList.add('is-visible');
           if (item) {
@@ -140,8 +157,11 @@ const addProduct = (formAddProduct, modalDiscountText, modalTotalCost) => {
         });
 
         formAddProduct.reset();
+        overlay.querySelector('.modal__description-file').
+            style.display = 'none';
         modalTotalCost.textContent = '0 руб.';
         modalDiscountText.disabled = true;
+        overlay.remove();
       },
       body: dataObject,
       headers: {
@@ -176,8 +196,11 @@ const modalControl = () => {
         modalCheckbox,
         modalDiscountText,
         modalTotalCost,
+        modalAddImageInput,
+        overlay,
       } = await showModal();
-      addProduct(formAddProduct, modalDiscountText, modalTotalCost);
+      addProduct(formAddProduct, modalDiscountText,
+          modalTotalCost, modalAddImageInput, overlay);
       checkboxToggle(modalCheckbox, modalDiscountText,
           formAddProduct, modalTotalCost);
       showChangePrice(formAddProduct, modalTotalCost);

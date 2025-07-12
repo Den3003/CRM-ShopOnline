@@ -59,14 +59,15 @@ const showModal = async (err, data) => {
             </div>
             <div class="modal-grid__cell modal-grid__cell_size_two-columns
               picture-grid">
-              <div>
+              <div class="modal__error-message-file">
                 <p class="modal__description-file">Изображение не должно
                   превышать размер 1 Мб</p>
               </div>
               <label class="modal__button-file
-                js-btn-add-picture">Добавить изображение
+                js-modal-btn-add-picture">Добавить изображение
                 <input class="modal__input-file
-                  visually-hidden" type="file" name="" id="">
+                  visually-hidden js-modal-image-input"
+                  type="file" name="image" id="image" accept="image/*">
               </label>
               <div class="modal__preview-file"></div>
             </div>
@@ -112,7 +113,9 @@ const showModal = async (err, data) => {
   const formAddProduct = overlay.querySelector('.js-form-add-product');
   const modalCheckbox = overlay.querySelector('.js-modal-checkbox');
   const modalDiscountText = overlay.querySelector('.js-modal-discount-text');
-  const modalTotalCost = document.querySelector('.js-modal-total-cost');
+  const modalTotalCost = overlay.querySelector('.js-modal-total-cost');
+  const modalAddImageInput = overlay.querySelector('.js-modal-image-input');
+  const modalPreviewFileBlock = overlay.querySelector('.modal__preview-file');
 
   if (!err && data) {
     const modalTitle = overlay.querySelector('.js-modal-title');
@@ -151,11 +154,27 @@ const showModal = async (err, data) => {
     modalBtnAddProduct.disabled = true;
   }
 
+  modalAddImageInput.addEventListener('change', () => {
+    if (modalAddImageInput.files[0].size < 1048576) {
+      overlay.querySelector('.modal__description-file').style.display = 'none';
+      if (modalAddImageInput.files.length > 0) {
+        const src = URL.createObjectURL(modalAddImageInput.files[0]);
+        const modalPreviewFile = document.createElement('img');
+        modalPreviewFile.src = src;
+        modalPreviewFileBlock.append(modalPreviewFile);
+      }
+    } else {
+      overlay.querySelector('.modal__description-file').style.display = 'block';
+    }
+  });
+
   return {
     formAddProduct,
     modalCheckbox,
     modalDiscountText,
     modalTotalCost,
+    modalAddImageInput,
+    overlay,
   };
 };
 
