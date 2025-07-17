@@ -162,6 +162,7 @@ const showModal = async (err, data) => {
         const modalPreviewFile = document.createElement('img');
         modalPreviewFile.src = src;
         modalPreviewFileBlock.append(modalPreviewFile);
+        modalPreviewFileBlock.style.display = 'block';
       }
     } else {
       overlay.querySelector('.modal__description-file').style.display = 'block';

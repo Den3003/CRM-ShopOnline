@@ -178,6 +178,7 @@
 }
 
 .modal__preview-file {
+  display: none;
   grid-area: file;
   padding: 30px 0;
 }
