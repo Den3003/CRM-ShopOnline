@@ -252,6 +252,12 @@ const listenPictureButtons = (row) => {
       });
 };
 
+const listenModalInputs = (modalInput, regExp) => {
+  modalInput.addEventListener('input', () => {
+    modalInput.value = modalInput.value.replace(regExp, '');
+  });
+};
+
 export default {
   // checkboxToggle,
   modalControl,
@@ -261,4 +267,5 @@ export default {
   listenPictureButtons,
   pageNavigationControl,
   // closeModalErrorControl,
+  listenModalInputs,
 };

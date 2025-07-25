@@ -1,3 +1,4 @@
+import control from "./control.js";
 import loadStyle from "./loadStyle.js";
 
 const showModal = async (err, data) => {
@@ -25,15 +26,18 @@ const showModal = async (err, data) => {
             <div class="modal-grid__cell">
               <label class="modal__label" for="title">Наименование</label>
               <input class="modal__input js-modal-name-product-input"
-                type="text" name="title" id="title" required>
+                type="text" title="Только кириллица и пробел" 
+                name="title" id="title" required>
               
               <label class="modal__label" for="category">Категория</label>
               <input class="modal__input js-modal-category-product-input"
-                type="text" name="category" id="category" required>
+                type="text" title="Только кириллица и пробел"
+                name="category" id="category" required>
               
               <label class="modal__label" for="units">Единица измерения</label>
               <input class="modal__input js-modal-units-product-input"
-                type="text" name="units" id="units" required>
+                type="text" title="Только кириллица"
+                name="units" id="units" required>
               
               <label class="modal__label" for="discount">Дисконт</label>
               <div class="modal__optional">
@@ -45,17 +49,20 @@ const showModal = async (err, data) => {
             </div>
             <div class="modal-grid__cell">
               <label class="modal__label" for="description">Описание</label>
-              <textarea rows="5"
+              <textarea rows="5" minlength="80"
                 class="modal__input js-modal-description-textarea"
-                name="description" id="description" required></textarea>
+                name="description" title="Только кириллица и пробел"
+                id="description" required></textarea>
               
               <label class="modal__label" for="count">Количество</label>
               <input class="modal__input js-modal-product-count-input"
-                type="number" name="count" id="count" min="1" required>
+                type="number" title="Только цифры"
+                name="count" id="count" min="1" required>
               
               <label class="modal__label" for="price">Цена</label>
               <input class="modal__input js-modal-product-price" type="number"
-                name="price" id="price" min="1" required>
+                name="price" title="Только цифры"
+                id="price" min="1" required>
             </div>
             <div class="modal-grid__cell modal-grid__cell_size_two-columns
               picture-grid">
@@ -116,6 +123,23 @@ const showModal = async (err, data) => {
   const modalTotalCost = overlay.querySelector('.js-modal-total-cost');
   const modalAddImageInput = overlay.querySelector('.js-modal-image-input');
   const modalPreviewFileBlock = overlay.querySelector('.modal__preview-file');
+  const modalNameProduct = overlay
+      .querySelector('.js-modal-name-product-input');
+  const modalCategoryInput = overlay
+      .querySelector('.js-modal-category-product-input');
+  const modalTextArea = overlay.querySelector('.js-modal-description-textarea');
+  const modalUnitsInput = overlay
+      .querySelector('.js-modal-units-product-input');
+  const modalCountInput = overlay
+      .querySelector('.js-modal-product-count-input');
+  const modalPriceInput = overlay.querySelector('.js-modal-product-price');
+
+  control.listenModalInputs(modalNameProduct, /[^А-ЯЁ\s]/gi);
+  control.listenModalInputs(modalCategoryInput, /[^А-ЯЁ\s]/gi);
+  control.listenModalInputs(modalTextArea, /[^А-ЯЁ\s]/gi);
+  control.listenModalInputs(modalUnitsInput, /[^А-ЯЁ]/gi);
+  control.listenModalInputs(modalCountInput, /\D/g);
+  control.listenModalInputs(modalPriceInput, /\D/g);
 
   if (!err && data) {
     const modalTitle = overlay.querySelector('.js-modal-title');
