@@ -19,23 +19,6 @@
   
 }
 
-.search-box__button {
-  color: var(--lavender-purple);
-  padding: 0;
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-  outline: none;
-}
-
-.search-box__button:hover, .search-box__button:focus {
-  color: var(--blue-marguerite);
-}
-
-.search-box__button:active {
-  color: var(--gigas);
-}
-
 @media (max-width: 800px) {
   .search-box {
     max-width: 100%;

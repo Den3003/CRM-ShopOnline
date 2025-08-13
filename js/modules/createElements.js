@@ -6,6 +6,7 @@ export const createRow = (obj) => {
   const newRaw = document.createElement('tr');
   newRaw.classList.add('cms-table__body-row');
   newRaw.setAttribute('data-product-Id', `${obj.id}`);
+  newRaw.setAttribute('data-product-name', `${obj.title}`);
   const imageObj = obj.image !== "image/notimage.jpg" ? `
     <svg class="cms-table__button-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <use href="#picture"></use>

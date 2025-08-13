@@ -1,5 +1,7 @@
 import control from "./control.js";
 import loadStyle from "./loadStyle.js";
+import { fetchRequest } from "./serverRequest.js";
+import { PRODUCTS_CATEGORY, URL } from "./variables.js";
 
 const showModal = async (err, data) => {
   await loadStyle('styles/modal.css');
@@ -32,7 +34,9 @@ const showModal = async (err, data) => {
               <label class="modal__label" for="category">Категория</label>
               <input class="modal__input js-modal-category-product-input"
                 type="text" title="Только кириллица и пробел"
-                name="category" id="category" required>
+                name="category" id="category" autocomplete="off"
+                list="category-list" required>
+              <datalist id="category-list" class="category-list"></datalist>
               
               <label class="modal__label" for="units">Единица измерения</label>
               <input class="modal__input js-modal-units-product-input"
@@ -133,6 +137,8 @@ const showModal = async (err, data) => {
   const modalCountInput = overlay
       .querySelector('.js-modal-product-count-input');
   const modalPriceInput = overlay.querySelector('.js-modal-product-price');
+  const categoryList = overlay.querySelector('.category-list');
+
 
   control.listenModalInputs(modalNameProduct, /[^А-ЯЁ\s]/gi);
   control.listenModalInputs(modalCategoryInput, /[^А-ЯЁ\s]/gi);
@@ -140,6 +146,19 @@ const showModal = async (err, data) => {
   control.listenModalInputs(modalUnitsInput, /[^А-ЯЁ]/gi);
   control.listenModalInputs(modalCountInput, /\D/g);
   control.listenModalInputs(modalPriceInput, /\D/g);
+
+
+  fetchRequest(URL + PRODUCTS_CATEGORY, {
+    method: 'get',
+    callback: (err, data) => {
+      data.forEach(element => {
+        const option = document.createElement('option');
+        option.value = element;
+        categoryList.appendChild(option);
+      });
+    },
+  });
+
 
   if (!err && data) {
     const modalTitle = overlay.querySelector('.js-modal-title');
@@ -172,7 +191,7 @@ const showModal = async (err, data) => {
     countProductInput.value = data.count;
     const priceProductInput = overlay.
         querySelector('.js-modal-product-price');
-    priceProductInput.value = data.count;
+    priceProductInput.value = data.price;
     const modalBtnAddProduct = document.
         querySelector('.js-modal-btn-add-product');
     modalBtnAddProduct.disabled = true;

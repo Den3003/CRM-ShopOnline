@@ -1,15 +1,17 @@
 import domElements from "./domElements.js";
 import {getTotalPrice, updatePageInfo} from "./calculations.js";
 import {renderGoods, renderTotalPrice} from "./render.js";
-import {statePages} from "./variables.js";
 import {
+  SEARCH_PARAM,
   PRODUCTS_LIST, URL,
   PRODUCTS_PAGE,
   PRODUCTS_TOTAL_PRICE,
+  statePages,
 } from "./variables.js";
 import {fetchRequest} from "./serverRequest.js";
 import {createRow} from "./createElements.js";
 import showModal from "./createModal.js";
+import showDeleteModal from "./createDelModal.js";
 
 
 const toBase64 = file => new Promise((resolve, reject) => {
@@ -69,42 +71,6 @@ const checkboxToggle = (modalCheckbox, modalDiscountText,
     `;
   });
 };
-
-// const addProductPage = (err, item) => {
-//   if (err) {
-//     domElements.modalErrorWrapper.classList.add('is-visible');
-//     if (item) {
-//       domElements.modalErrorText.innerHTML = item;
-//     }
-//     return;
-//   }
-
-//   if (statePages.currentPage === statePages.totalPages &&
-//     statePages.totalCount % +domElements.cmsLimitProductsPage.textContent) {
-//     domElements.cmsTableBody
-//         .insertAdjacentElement('beforeend', createRow(item));
-//   }
-//   if (statePages.currentPage === statePages.totalPages &&
-//     !statePages.totalCount % +domElements.cmsLimitProductsPage.textContent) {
-//     domElements.cmsTableBody.innerHTML = '';
-//     domElements.cmsTableBody
-//         .insertAdjacentElement('beforeend', createRow(item));
-//   }
-
-//   httpRequest(URL + PRODUCTS_TOTAL_PRICE, {
-//     method: 'get',
-//     callback: renderTotalPrice,
-//   });
-
-//   httpRequest(URL + PRODUCTS_LIST, {
-//     method: 'get',
-//     callback: updatePageInfo,
-//   });
-
-//   domElements.formAddProduct.reset();
-//   domElements.modalTotalCost.textContent = '0 руб.';
-//   domElements.modalDiscountText.disabled = true;
-// };
 
 const addProduct = (formAddProduct, modalDiscountText,
     modalTotalCost, modalAddImageInput, overlay) => {
@@ -226,16 +192,35 @@ const modalControl = () => {
   domElements.cmsWrapper.addEventListener('click', openModal);
 };
 
+//! Удаление товара из списка товаров(таблицы)
+
 const deleteProduct = () => {
-  domElements.cmsTableBody.addEventListener('click', e => {
+  domElements.cmsTableBody.addEventListener('click', async e => {
     const target = e.target;
     if (target.closest('.js-cms-delete-product')) {
-      const objectId = +target.closest('.cms-table__body-row')
+      const objectId = target.closest('.cms-table__body-row')
           .dataset.productId;
-      target.closest('.cms-table__body-row').remove();
-      data.cloneUserArray = data.cloneUserArray
-          .filter(item => +item.id !== objectId);
-      renderGoods(data.cloneUserArray);
+      const objectName = target.closest('.cms-table__body-row')
+          .dataset.productName;
+      const result = await showDeleteModal(objectName);
+      if (result) {
+        target.closest('.cms-table__body-row').remove();
+        fetchRequest(URL + PRODUCTS_LIST + objectId, {
+          method: 'delete',
+          callback: (err, data) => {
+            if (!err) {
+              fetchRequest(URL + PRODUCTS_TOTAL_PRICE, {
+                method: 'get',
+                callback: renderTotalPrice,
+              });
+              fetchRequest(URL + PRODUCTS_LIST, {
+                method: 'get',
+                callback: updatePageInfo,
+              });
+            }
+          },
+        });
+      }
     }
   });
 };
@@ -258,14 +243,40 @@ const listenModalInputs = (modalInput, regExp) => {
   });
 };
 
+
+//! Запрос в поисковике
+
+function debounce(func, delay) {
+  let timeout;
+  return function(...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), delay);
+  };
+}
+
+const fetchData = (val) => {
+  if (val.trim()) {
+    fetchRequest(URL + PRODUCTS_LIST + SEARCH_PARAM + val, {
+      method: 'get',
+      callback: renderGoods,
+    });
+  } else {
+    fetchRequest(URL + PRODUCTS_LIST, {
+      method: 'get',
+      callback: renderGoods,
+    });
+  }
+};
+
+const debouncedFetch = debounce(fetchData, 300);
+
+domElements.cmsSearchInput.addEventListener('input'
+    , e => debouncedFetch(e.target.value));
+
 export default {
-  // checkboxToggle,
   modalControl,
-  // addProduct,
-  // showChangePrice,
   deleteProduct,
   listenPictureButtons,
   pageNavigationControl,
-  // closeModalErrorControl,
   listenModalInputs,
 };

@@ -2,8 +2,6 @@ import domElements from "./domElements.js";
 import {createRow} from "./createElements.js";
 import {updatePageInfo} from "./calculations.js";
 import {statePages} from "./variables.js";
-import {fetchRequest} from "./serverRequest.js";
-import {PRODUCTS_TOTAL_PRICE, URL} from "./variables.js";
 
 export const renderTotalPrice = (err, data) => {
   domElements.cmsTotalCost.innerHTML = data + ' руб.';
@@ -17,10 +15,10 @@ export const renderGoods = (err, arr) => {
   }
   statePages.currentPage = arr.page;
 
-  fetchRequest(URL + PRODUCTS_TOTAL_PRICE, {
-    method: 'get',
-    callback: renderTotalPrice,
-  });
+  if (!arr.goods.length) {
+    domElements.cmsTableBody.innerHTML = 'Ничего не найдено';
+  }
+
   updatePageInfo(err, arr);
 
   arr.goods.map((item) => {
