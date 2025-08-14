@@ -194,7 +194,7 @@ const showModal = async (err, data) => {
     priceProductInput.value = data.price;
     const modalBtnAddProduct = document.
         querySelector('.js-modal-btn-add-product');
-    modalBtnAddProduct.disabled = true;
+    modalBtnAddProduct.textContent = 'Изменить товар';
   }
 
   modalAddImageInput.addEventListener('change', () => {

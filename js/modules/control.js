@@ -13,6 +13,7 @@ import {createRow} from "./createElements.js";
 import showModal from "./createModal.js";
 import showDeleteModal from "./createDelModal.js";
 
+//! Преобразование картинки в Base64
 
 const toBase64 = file => new Promise((resolve, reject) => {
   const reader = new FileReader();
@@ -25,6 +26,8 @@ const toBase64 = file => new Promise((resolve, reject) => {
 
   reader.readAsDataURL(file);
 });
+
+//! Стрелки переключения страниц
 
 const pageNavigationControl = () => {
   domElements.cmsPrevButton.addEventListener("click", () => {
@@ -51,6 +54,8 @@ const pageNavigationControl = () => {
   });
 };
 
+//! Чекбокс модального окна
+
 const checkboxToggle = (modalCheckbox, modalDiscountText,
     formAddProduct, modalTotalCost) => {
   modalCheckbox.addEventListener('click', e => {
@@ -72,8 +77,10 @@ const checkboxToggle = (modalCheckbox, modalDiscountText,
   });
 };
 
+//! Добавление и изменение товара в таблице
+
 const addProduct = (formAddProduct, modalDiscountText,
-    modalTotalCost, modalAddImageInput, overlay) => {
+  modalTotalCost, modalAddImageInput, overlay, productId, target) => {
   formAddProduct.addEventListener('submit', async e => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -87,7 +94,27 @@ const addProduct = (formAddProduct, modalDiscountText,
       dataObject.image = await toBase64(dataObject.image);
     }
 
-    fetchRequest(URL + PRODUCTS_LIST, {
+    //! Изменение товара
+
+    if (productId) {
+      fetchRequest(URL + PRODUCTS_LIST + productId, {
+        method: 'PATCH',
+        callback: (err, data) => {
+          target.replaceWith(createRow(data));
+          formAddProduct.reset();
+          overlay.remove();
+        },
+        body: dataObject,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+    } else {
+
+       //! Добавление товара 
+
+      fetchRequest(URL + PRODUCTS_LIST, { 
       method: 'post',
       callback: (err, item) => {
         if (err) {
@@ -133,9 +160,12 @@ const addProduct = (formAddProduct, modalDiscountText,
       headers: {
         'Content-Type': 'application/json',
       },
-    });
+      }); 
+    } 
   });
 };
+
+//! Вычисление итоговой цены в модальном окне
 
 const showChangePrice = (formAddProduct, modalTotalCost) => {
   formAddProduct.addEventListener('change', e => {
@@ -154,8 +184,13 @@ const showChangePrice = (formAddProduct, modalTotalCost) => {
   });
 };
 
+//! Открывание модального окна 
+
 const modalControl = () => {
   const openModal = async ({target}) => {
+
+//! Открывание модального окна если нажата кнопка "Добавить товар"
+
     if (target.classList.contains('js-cms-btn-add-product')) {
       const {
         formAddProduct,
@@ -172,18 +207,26 @@ const modalControl = () => {
       showChangePrice(formAddProduct, modalTotalCost);
     }
 
+//! Открывание модального окна если нажата кнопка "Изменить товар"
+
     if (target.closest('.js-cms-create-product')) {
       const productId =
-        target.closest('.cms-table__body-row').dataset.productId;
+      target.closest('.cms-table__body-row').dataset.productId;
+      
       const {
         formAddProduct,
         modalCheckbox,
         modalDiscountText,
         modalTotalCost,
+        modalAddImageInput,
+        overlay,
       } = await fetchRequest(URL + PRODUCTS_LIST + productId, {
         method: 'get',
         callback: showModal,
       });
+
+      addProduct(formAddProduct, modalDiscountText,
+        modalTotalCost, modalAddImageInput, overlay, productId, target.closest('.cms-table__body-row'));
       checkboxToggle(modalCheckbox, modalDiscountText,
           formAddProduct, modalTotalCost);
       showChangePrice(formAddProduct, modalTotalCost);
@@ -224,6 +267,9 @@ const deleteProduct = () => {
     }
   });
 };
+
+
+//! Открывание фото товара
 
 const listenPictureButtons = (row) => {
   row.querySelector('.js-cms-create-picture')
